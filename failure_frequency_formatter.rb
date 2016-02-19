@@ -1,5 +1,6 @@
 require 'pry'
 require 'yaml'
+require_relative './frequency_logger'
 
 LOG_PATH = './failure_log.yml'
 
@@ -34,46 +35,5 @@ class FailureFrequencyFormatter
     File.open(LOG_PATH, 'w') do |file|
       file.write YAML.dump(logger)
     end
-  end
-end
-
-class FrequencyLogger
-  def log
-    @log ||= {}
-  end
-
-  def log_example_passed(example)
-    log[example.location_rerun_argument] ||= FrequencyLogItem.new(example.full_description)
-    log[example.location_rerun_argument].passed
-  end
-
-  def log_example_failed(example)
-    log[example.location_rerun_argument] ||= FrequencyLogItem.new(example.full_description)
-    log[example.location_rerun_argument].failed
-  end
-end
-
-class FrequencyLogItem
-  attr_writer :total_runs, :failures
-
-  def initialize(description)
-    @description = description
-  end
-
-  def total_runs
-    @total_runs ||= 0
-  end
-
-  def failures
-    @failures ||= 0
-  end
-
-  def passed
-    self.total_runs += 1
-  end
-
-  def failed
-    self.total_runs += 1
-    self.failures += 1
   end
 end
