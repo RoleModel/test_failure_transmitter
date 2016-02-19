@@ -6,13 +6,13 @@ class FrequencyLogger
   end
 
   def log_example_passed(example)
-    log[example.location_rerun_argument] ||= FrequencyLogItem.new(example.full_description)
-    log[example.location_rerun_argument].passed
+    log[example.id] ||= FrequencyLogItem.new(example.full_description)
+    log[example.id].passed
   end
 
   def log_example_failed(example)
-    log[example.location_rerun_argument] ||= FrequencyLogItem.new(example.full_description)
-    log[example.location_rerun_argument].failed
+    log[example.id] ||= FrequencyLogItem.new(example.full_description)
+    log[example.id].failed
   end
 
   def most_frequent_failures(count = 10)

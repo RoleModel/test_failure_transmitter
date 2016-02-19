@@ -28,7 +28,7 @@ class FailureFrequencyFormatter
     save_results_to_file
   end
 
-  def close(notification)
+  def close(_notification)
     print_summary
   end
 
