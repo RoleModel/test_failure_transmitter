@@ -1,0 +1,7 @@
+- [ ] Better querying of data
+- [x] Show summary of failure frequency at the end of the test run
+- [ ] Don't show tests that haven't failed in the summary
+- [ ] Add some color to the summary
+  - Yellow if under certain failure rate, red if over?
+- [ ] Rake task to run with this formatter only on the master branch with no uncommitted changes
+- [ ] Package up in an easily-includable form (Gem?)
