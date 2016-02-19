@@ -43,6 +43,7 @@ class FailureFrequencyFormatter
   end
 
   def save_results_to_file
+    logger.log_run_finished
     File.open(LOG_PATH, 'w') do |file|
       file.write YAML.dump(logger)
     end
@@ -50,8 +51,13 @@ class FailureFrequencyFormatter
 
   def print_summary
     output.puts "Most Frequent Failures:"
-    logger.most_frequent_failures.each do |log_item|
-      output.puts log_item
+    failures = logger.most_frequent_failures
+    if failures.count > 0
+      failures.each do |log_item|
+        output.puts log_item
+      end
+    else
+      output.puts "No failures in #{logger.total_runs} total suite runs"
     end
   end
 end

@@ -6,7 +6,7 @@
 - [ ] Add some color to the summary
   - Yellow if under certain failure rate, red if over?
 - [ ] Rake task to run with this formatter only on the master branch with no uncommitted changes
-- [ ] Figure out what to show if there are no known failures
+- [x] Figure out what to show if there are no known failures
 - [ ] Package up in an easily-includable form (Gem?)
 - [ ] Export to CSV
 - [ ] Rake task to print report on test failure frequency
