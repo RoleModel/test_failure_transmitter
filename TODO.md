@@ -2,7 +2,7 @@
 - [ ] Better querying of data
 - [x] Show summary of failure frequency at the end of the test run
 - [x] Don't show tests that haven't failed in the summary
-- [ ] Print number of runs in summary
+- [x] Print number of runs in summary
 - [ ] Add some color to the summary
   - Yellow if under certain failure rate, red if over?
 - [ ] Rake task to run with this formatter only on the master branch with no uncommitted changes

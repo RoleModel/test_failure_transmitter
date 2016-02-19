@@ -28,7 +28,7 @@ class FrequencyLogItem
   end
 
   def to_s
-    "#{failure_percent.round(1)}% - #{description}"
+    "#{failure_percent.round(1)}% (#{failures}/#{total_runs}) - #{description}"
   end
 
   def <=>(other)
