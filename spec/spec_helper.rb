@@ -16,6 +16,14 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require_relative '../failure_frequency_formatter'
+
+FailureFrequencyFormatter.configure do |config|
+  config.host = 'localhost'
+  config.port = 3000
+  config.path = '/projects/3/test_results'
+end
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest

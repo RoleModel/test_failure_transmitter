@@ -1,11 +1,21 @@
-require 'pry'
-require 'yaml'
 require_relative './frequency_logger'
-
-LOG_PATH = './failure_log.yml'
+require 'net/http'
+require 'json'
 
 class FailureFrequencyFormatter
-  RSpec::Core::Formatters.register self, :stop, :close
+  RSpec::Core::Formatters.register self, :stop
+
+  class Configuration
+    attr_accessor :host, :port, :path
+  end
+
+  def self.configure
+    yield config
+  end
+
+  def self.config
+    @config ||= Configuration.new
+  end
 
   attr_reader :output
 
@@ -13,51 +23,27 @@ class FailureFrequencyFormatter
     @output = output
   end
 
+  def config
+    self.class.config
+  end
+
   def logger
-    @logger ||= begin
-      if File.exist?(LOG_PATH)
-        YAML.load_file(LOG_PATH)
-      else
-        FrequencyLogger.new
-      end
-    end
+    @logger ||= FrequencyLogger.new
   end
 
   def stop(notification)
-    log_example_statuses(notification.examples)
-    save_results_to_file
+    send_test_results(notification.examples)
   end
 
-  def close(_notification)
-    print_summary
-  end
-
-  def log_example_statuses(examples)
-    examples.each do |example|
+  def send_test_results(examples)
+    result = examples.each_with_object([]) do |example, results|
       if example.execution_result.status == :passed
-        logger.log_example_passed(example)
+        results << { description: example.full_description, passed: true }
       elsif example.execution_result.status == :failed
-        logger.log_example_failed(example)
+        results << { description: example.full_description, passed: false }
       end
     end
-  end
-
-  def save_results_to_file
-    logger.log_run_finished
-    File.open(LOG_PATH, 'w') do |file|
-      file.write YAML.dump(logger)
-    end
-  end
-
-  def print_summary
-    output.puts "Most Frequent Failures:"
-    failures = logger.most_frequent_failures
-    if failures.count > 0
-      failures.each do |log_item|
-        output.puts log_item
-      end
-    else
-      output.puts "No failures in #{logger.total_runs} total suite runs"
-    end
+    results = { results: result }
+    Net::HTTP.new(config.host, config.port).post(config.path, results.to_json, 'Content-Type' => 'application/json')
   end
 end

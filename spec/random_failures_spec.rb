@@ -7,6 +7,10 @@ RSpec.describe "A spec with random failures" do
     expect(1..9).to cover Random.rand(1..10)
   end
 
+  it "has a 7 out of 10 chance of failing" do
+    expect(1..3).to cover Random.rand(1..10)
+  end
+
   specify "some examples always pass" do
   end
 end
